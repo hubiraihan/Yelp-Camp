@@ -19,15 +19,15 @@ const app = express();
 app.set('view engine', 'ejs');   // EJSを使うと指定
 app.set('views', path.join(__dirname, 'views'));     // テンプレートのディレクトリ
 
-app.get('/makecampground', async (req, res) => {
-    const camp = new Campground({title: '私の庭', description: '気軽に安くキャンプ！'});
-    await camp.save();
-    res.send(camp);
-});
 
 app.get('/', (req, res) => {
     res.render('home')
 });
+
+app.get('/campgrounds', async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds });           //res.render は Express におけるレスポンスの一種で、テンプレートエンジンを使って HTML を生成し、クライアントに返す役割を持っています。
+});                                                             //{ campgrounds }はテンプレートに渡すデータ
 
 app.listen(3000, () => {
     console.log('ポート3000でリクエスト待受中')

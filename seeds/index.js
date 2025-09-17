@@ -15,11 +15,11 @@ mongoose.connect('mongodb://localhost:27017/Yelp-camp', { useNewUrlParser: true,
 
 const sample = array => array[Math.floor(Math.random() * array.length)];
 
-const seedDB = async () => {
+const seedDB = async () => {        //seed作成関数
     await Campground.deleteMany({});
     for(let i = 0; i < 50; i ++) {
-        const randomCityIndex = Math.floor(Math.random() * cities.length);
-        const camp = new Campground({
+        const randomCityIndex = Math.floor(Math.random() * cities.length); //ランダムな数字を生成
+        const camp = new Campground({       //50回新しいキャンプ場のデータをDBに作成
             location: `${cities[randomCityIndex].prefecture}${cities[randomCityIndex].city}`,
             title: `${sample(descriptors)}・${sample(places)}`
         });
