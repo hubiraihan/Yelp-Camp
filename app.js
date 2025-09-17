@@ -22,6 +22,8 @@ const app = express();
 app.set('view engine', 'ejs');   // EJSを使うと指定
 app.set('views', path.join(__dirname, 'views'));     // テンプレートのディレクトリ
 
+app.use(express.urlencoded({extended: true}));      //express.urlencoded() をミドルウェアとして登録すると、req.body にきれいにパースされたオブジェクトとして入る👇
+
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -32,9 +34,20 @@ app.get('/campgrounds', async (req, res) => {
     res.render('campgrounds/index', { campgrounds });           //res.render は Express におけるレスポンスの一種で、テンプレートエンジンを使って HTML を生成し、クライアントに返す役割を持っています。
 });                                                             //{ campgrounds }はテンプレートに渡すデータ
 
+app.get('/campgrounds/new', (req, res) => {
+    res.render('campgrounds/new');
+});
+
 app.get('/campgrounds/:id', async (req, res) => {           //:はルートパラメーター
     const campground = await Campground.findById(req.params.id);
     res.render('campgrounds/show', { campground });
+});
+
+
+app.post('/campgrounds', async (req, res) => {
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
 });
 
 
