@@ -14,6 +14,9 @@ mongoose.connect('mongodb://localhost:27017/Yelp-camp', { useNewUrlParser: true,
 
 const app = express();
 
+// req = クライアント（ブラウザなど）からサーバーに送られてきた リクエストの情報
+// res = サーバーからクライアントに返す レスポンスの操作をするためのオブジェクト
+
 
 
 app.set('view engine', 'ejs');   // EJSを使うと指定
@@ -28,6 +31,13 @@ app.get('/campgrounds', async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds });           //res.render は Express におけるレスポンスの一種で、テンプレートエンジンを使って HTML を生成し、クライアントに返す役割を持っています。
 });                                                             //{ campgrounds }はテンプレートに渡すデータ
+
+app.get('/campgrounds/:id', async (req, res) => {           //:はルートパラメーター
+    const campground = await Campground.findById(req.params.id);
+    res.render('campgrounds/show', { campground });
+});
+
+
 
 app.listen(3000, () => {
     console.log('ポート3000でリクエスト待受中')
